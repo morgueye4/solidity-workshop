@@ -1,24 +1,39 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.2 <0.9.0;
 
-// EXERCICE 2: MonToken avec Interface IMonToken
-// ================================
-// Instructions:
-// 1. Créez une interface IMonToken avec les fonctions de base
-// 2. Modifiez MonToken pour implémenter cette interface
-// 3. Ajoutez les fonctionnalités manquantes
-
-interface IMonToken {
-    // TODO: Déclarer les événements
+interface IERC20Basic {
+    event Transfer(address indexed from, address indexed to, uint256 value);
     
-    // TODO: Déclarer les fonctions:
-    // - totalSupply
-    // - balanceOf
-    // - transfer
+    function totalSupply() external view returns (uint256);
+    function balanceOf(address account) external view returns (uint256);
+    function transfer(address to, uint256 amount) external returns (bool);
 }
 
-contract MonTokenV2 {
-    // TODO: Implémenter l'interface IMonToken
-    // TODO: Ajouter les variables d'état nécessaires
-    // TODO: Implémenter toutes les fonctions de l'interface
+contract MonTokenV2Solution is IERC20Basic {
+    mapping(address => uint256) private _soldes;
+    uint256 private _emissionTotale;
+    
+    constructor(uint256 emission) {
+        _emissionTotale = emission;
+        _soldes[msg.sender] = emission;
+    }
+    
+    function totalSupply() external view override returns (uint256) {
+        return _emissionTotale;
+    }
+    
+    function balanceOf(address account) external view override returns (uint256) {
+        return _soldes[account];
+    }
+    
+    function transfer(address to, uint256 amount) external override returns (bool) {
+        require(_soldes[msg.sender] >= amount, "Solde insuffisant");
+        require(to != address(0), "Destinataire invalide");
+        
+        _soldes[msg.sender] -= amount;
+        _soldes[to] += amount;
+        
+        emit Transfer(msg.sender, msg.sender, amount);
+        return true;
+    }
 }
