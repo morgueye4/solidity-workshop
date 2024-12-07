@@ -2,6 +2,9 @@
 
 Solidity Workshop Materials
 
+## Lien des Slides
+[Solidity Workshop](https://docs.google.com/presentation/d/1R5EEjxguDSnzhwo__EbjFrTii50Y_t4gm7V4z9blQAY/edit?usp=sharing)
+
 ## Créer wallet Metamask 
 
 Aller vers le lien :
